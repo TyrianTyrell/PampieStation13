@@ -17,15 +17,19 @@
 		var/underwear
 		var/underwear_color
 		var/default_slot = 1
-		var/savefile/S = new/savefile("data/player_saves/[piss]/[ckey]/preferences.sav")
-		S.cd = "/"
-		S["default_slot"] >> default_slot
-		S.cd = "/character[default_slot]"
-		S["underwear"] >> underwear
-		S["underwear_color"] >> underwear_color
-		sanitize_inlist(underwear, GLOB.underwear_list)
-		sanitize_hexcolor(underwear_color)
-		if((HAS_TRAIT(butt,TRAIT_INCONTINENT) || HAS_TRAIT(butt,TRAIT_FULLYINCONTINENT) || HAS_TRAIT(butt,TRAIT_POTTYREBEL)))
+		if(fexists("data/player_saves/[piss]/[ckey]/preferences.sav"))
+			var/savefile/S = new/savefile("data/player_saves/[piss]/[ckey]/preferences.sav")
+			S.cd = "/"
+			S["default_slot"] >> default_slot
+			S.cd = "/character[default_slot]"
+			S["underwear"] >> underwear
+			S["underwear_color"] >> underwear_color
+			sanitize_inlist(underwear, GLOB.underwear_list)
+			sanitize_hexcolor(underwear_color)
+		else
+			underwear = butt.baseunderwear
+			underwear_color = butt.underwear_color
+		if((HAS_TRAIT(butt,TRAIT_INCONTINENT) || HAS_TRAIT(butt,TRAIT_FULLYINCONTINENT) || HAS_TRAIT(butt,TRAIT_POTTYREBEL) || HAS_TRAIT(butt,BABYBRAINED_TRAIT)))
 			butt.underwear = "Diaper"
 			switch(butt.brand)
 				if("plain")

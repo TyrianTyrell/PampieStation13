@@ -438,7 +438,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_INCONTINENT "incontinent"
 #define TRAIT_FULLYINCONTINENT "unaware"
 #define TRAIT_POTTYREBEL "potty_rebel"
-
 /* Traits for ventcrawling.
  * Both give access to ventcrawling, but *_NUDE requires the user to be
  * wearing no clothes and holding no items. If both present, *_ALWAYS
@@ -522,6 +521,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define MAFIA_TRAIT "mafia"
 /// Trait associated with highlander
 #define HIGHLANDER_TRAIT "highlander"
+/// Trait associated with regression ray
+#define BABYBRAINED_TRAIT "baby_brained"
 
 ///generic atom traits
 #define DO_NOT_SPLASH "do_not_splash"
@@ -568,6 +569,7 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define FROSTMINER_ENRAGE_TRAIT "frostminer-enrage"
 #define NO_GRAVITY_TRAIT "no-gravity"
 #define LEAPER_BUBBLE_TRAIT "leaper-bubble"
+#define REGRESSION_TRAIT "regression-trait"
 /// sticky nodrop sounds like a bad soundcloud rapper's name
 #define STICKY_NODROP "sticky-nodrop"
 #define SKILLCHIP_TRAIT "skillchip"

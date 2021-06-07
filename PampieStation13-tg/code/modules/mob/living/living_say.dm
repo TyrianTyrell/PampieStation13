@@ -166,6 +166,8 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		else
 			to_chat(src, "<span class='warning'>You find yourself unable to speak!</span>")
 			return
+	if(HAS_TRAIT(H,BABYBRAINED_TRAIT))
+		language = /datum/language/babybabble
 
 	var/message_range = 7
 

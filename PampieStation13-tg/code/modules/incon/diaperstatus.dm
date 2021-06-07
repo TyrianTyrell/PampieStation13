@@ -9,6 +9,8 @@
 /mob/living/carbon/var/heftersbonus = 0
 /mob/living/carbon/var/needpee = 0
 /mob/living/carbon/var/needpoo = 0
+/mob/living/carbon/var/regressiontimer = 0
+/mob/living/carbon/var/statusoverlay = null
 /mob/var/rollbonus = 0
 
 /mob/living/carbon/human/ComponentInitialize()
@@ -55,10 +57,10 @@
 		to_chat(src,"You can't poop, you're dead!")
 
 /mob/living/carbon/proc/PampUpdate()
-	if(stat != DEAD && (HAS_TRAIT(src,TRAIT_INCONTINENT) || HAS_TRAIT(src,TRAIT_FULLYINCONTINENT) || HAS_TRAIT(src,TRAIT_POTTYREBEL)))
-		if(usr.client.prefs.accident_types != "Poop Only")
+	if(stat != DEAD && (HAS_TRAIT(src,TRAIT_INCONTINENT) || HAS_TRAIT(src,TRAIT_FULLYINCONTINENT) || HAS_TRAIT(src,TRAIT_POTTYREBEL) || HAS_TRAIT(src,BABYBRAINED_TRAIT)) && src.client != null)
+		if(src.client.prefs.accident_types != "Poop Only")
 			pee = pee + 0.8 + (fluids/200)
-		if(usr.client.prefs.accident_types != "Pee Only")
+		if(src.client.prefs.accident_types != "Pee Only")
 			poop = poop + 0.45 + (satiety/200)
 	if (wetness >= 1)
 		if (HAS_TRAIT(src,TRAIT_POTTYREBEL))
@@ -426,7 +428,7 @@
 /mob/living/carbon/verb/Pee()
 	if(usr.client.prefs.accident_types != "Poop Only")
 		set category = "IC"
-	if((HAS_TRAIT(usr,TRAIT_INCONTINENT) || HAS_TRAIT(usr,TRAIT_POTTYREBEL)) && !HAS_TRAIT(usr,TRAIT_FULLYINCONTINENT))
+	if((HAS_TRAIT(usr,TRAIT_INCONTINENT) || HAS_TRAIT(usr,TRAIT_POTTYREBEL) || HAS_TRAIT(usr,BABYBRAINED_TRAIT)) && !HAS_TRAIT(usr,TRAIT_FULLYINCONTINENT))
 		on_purpose = 1
 		Wetting()
 	else
@@ -435,7 +437,7 @@
 /mob/living/carbon/verb/Poop()
 	if(usr.client.prefs.accident_types != "Pee Only")
 		set category = "IC"
-	if((HAS_TRAIT(usr,TRAIT_INCONTINENT) || HAS_TRAIT(usr,TRAIT_POTTYREBEL)) && !HAS_TRAIT(usr,TRAIT_FULLYINCONTINENT))
+	if((HAS_TRAIT(usr,TRAIT_INCONTINENT) || HAS_TRAIT(usr,TRAIT_POTTYREBEL) || HAS_TRAIT(usr,BABYBRAINED_TRAIT)) && !HAS_TRAIT(usr,TRAIT_FULLYINCONTINENT))
 		on_purpose = 1
 		Pooping()
 	else
@@ -463,7 +465,16 @@
 	screen_loc = ui_diaper
 
 /atom/movable/screen/diaperstatus/proc/DiaperUpdate(mob/living/carbon/owner)
-	if(HAS_TRAIT(owner,TRAIT_POTTYREBEL || TRAIT_INCONTINENT) && !HAS_TRAIT(owner,TRAIT_FULLYINCONTINENT))
+	if(HAS_TRAIT(owner,BABYBRAINED_TRAIT))
+		if(owner.regressiontimer > 0)
+			owner.regressiontimer--
+		else
+			REMOVE_TRAIT(owner,BABYBRAINED_TRAIT,REGRESSION_TRAIT)
+			REMOVE_TRAIT(owner,TRAIT_NORUNNING,REGRESSION_TRAIT)
+			SEND_SIGNAL(owner,COMSIG_DIAPERCHANGE,owner.ckey)
+			owner.overlays -= owner.statusoverlay
+			owner.statusoverlay = null
+	if(HAS_TRAIT(owner,TRAIT_POTTYREBEL || TRAIT_INCONTINENT || BABYBRAINED_TRAIT) && !HAS_TRAIT(owner,TRAIT_FULLYINCONTINENT))
 		if (owner.wetness >= 1)
 			if (owner.stinkiness >= 1)
 				icon_state = "hud_plain_used"

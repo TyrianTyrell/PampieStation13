@@ -201,6 +201,7 @@
 	if(has_gun_safety)
 		. += "<span>The safety is [safety ? "<font color='#00ff15'>ON</font>" : "<font color='#ff0000'>OFF</font>"].</span>"
 
+
 /obj/item/gun/equipped(mob/living/user, slot)
 	. = ..()
 	if(zoomed && user.get_active_held_item() != src)
@@ -368,6 +369,9 @@
 		return FALSE
 	if(has_gun_safety && safety)
 		to_chat(user, "<span class='warning'>The safety is on!</span>")
+		return FALSE
+	if(HAS_TRAIT(user, BABYBRAINED_TRAIT))
+		to_chat(user, "<span class='warning'>B...beh? You can't figure out how to use the funny pew-pew thing.</span>")
 		return FALSE
 
 /obj/item/gun/proc/toggle_safety(mob/user, override)
