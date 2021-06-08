@@ -490,7 +490,8 @@
 	metabolization_rate = 1.5 * REAGENTS_METABOLISM
 
 /datum/reagent/medicine/laxative/on_mob_life(mob/living/carbon/M, delta_time, times_fired)
-	M.poop += (10 * REAGENTS_EFFECT_MULTIPLIER * delta_time)
+	if(M.client.prefs.accident_types != "Pee Only")
+		M.poop += (10 * REAGENTS_EFFECT_MULTIPLIER * delta_time)
 	metabolization_rate = 1.5 * REAGENTS_METABOLISM
 	..()
 
